@@ -5,8 +5,8 @@
 
 class FlightTimetableEntry{
 protected:
-    enum AirportEnum{Aberdeen, London, Manchester, Copenhagen, Esbjerg}
-    enum AirlinesEnum{BA, SK, KL, EZY, LM}
+    enum AirportEnum{Aberdeen=0, London, Manchester, Copenhagen, Esbjerg, INVALID};
+    enum AirlinesEnum{BA=0, SK, KL, EZY, LM, NAN};
 
     AirportEnum origin;
     AirportEnum destination;
@@ -33,6 +33,8 @@ public:
     const void printEntry();
 
     // Utility Functions
+
+
     static bool getFlightDurationTime(AirportEnum orig, AirportEnum dest, unsigned char& out_hrs, unsigned char& out_min);
     static bool getFlightArrivalTime(AirportEnum orig, AirportEnum dest, unsigned char dpt_hrs_loc, unsigned char dpt_min_loc, unsigned char& arr_hrs_loc, unsigned char& arr_min_loc);
     static bool checkEntryVals(AirportEnum orig, AirportEnum dest, AirlinesEnum airID, int flCode, unsigned char dp_hr, unsigned char dp_min);
@@ -42,7 +44,7 @@ public:
     static std::string value2string(unsigned char hour, unsigned char minute);
     static std::string value2string(int flCode);
 
-    static int RandomValInBounds(int min_val, int max_val)
+    static int RandomValInBounds(int min_val, int max_val);
 };
 
 
