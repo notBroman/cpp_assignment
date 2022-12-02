@@ -1,0 +1,3 @@
+/Users/notbroman/Documents/uni/Y3/EE3093/assignment_2/build/CMakeFiles/a.out.dir
+/Users/notbroman/Documents/uni/Y3/EE3093/assignment_2/build/CMakeFiles/edit_cache.dir
+/Users/notbroman/Documents/uni/Y3/EE3093/assignment_2/build/CMakeFiles/rebuild_cache.dir
