@@ -56,15 +56,15 @@ void FlightTimetableEntry::reset(){
 
 bool FlightTimetableEntry::setRandomFTE(){
     if(!this->init_flag){
-        AirportsEnum orig, dest;
+        AirportEnum orig, dest;
         AirlinesEnum airline;
-        unsigned char dept_hr, dept_min;
+        unsigned char dept_hr, dept_min, dur_hr, dur_min;
         int fl_code, temp;
         fl_code = 0;
 
-        orig = this->RandomValInBounds(0,4);
-        dest = this->RandomValInBounds(0,4);
-        airline = this->RandomValInBounds(0,4);
+        orig = (AirportEnum)this->RandomValInBounds(0,4);
+        dest = (AirportEnum)this->RandomValInBounds(0,4);
+        airline = (AirlinesEnum)this->RandomValInBounds(0,4);
 
         // get valid departure
         switch(orig){
@@ -83,11 +83,47 @@ bool FlightTimetableEntry::setRandomFTE(){
             case Esbjerg:
                 temp = this->RandomValInBounds(5*60+45,21*60+30);
                 break;
+            default:
+                break;
         }
 
         dept_hr = (int)temp/60;
         dept_min = temp%60;
         // get valid fl_code
+        this->getFlightDurationTime(orig, dest, dur_hr, dur_min);
+        // if the flight is international add 5 as the second digit
+        fl_code += (dur_hr*60+min > 90) ? 500 : 0;
+
+        // add a rendom value for each airline
+        switch(airline){
+            case BA:
+                fl_code += this->RandomValInBounds(80,99);
+                break;
+            case SK:
+
+                fl_code += this->RandomValInBounds(0,19);
+                break;
+            case KL:
+
+                fl_code += this->RandomValInBounds(20,39);
+                break;
+            case EZY:
+
+                fl_code += this->RandomValInBounds(40,59);
+                break;
+            case LM:
+
+                fl_code += this->RandomValInBounds(60,79);
+                break;
+            default:
+                break;
+        }
+        // 7 is added to the first digit if it leaves in the afternoon
+        // 2 is added to the first digit if it is an international flight
+        // otherwise 0 is added
+        fl_code += (dept_hr*60+dept_min > 12*60 ) ? 7000 : 0;
+        fl_code += ( orig > 2 || dest > 2 ) ? 2000 : 0;
+
 
         this->checkAndSetFTE(orig, dest, airline, fl_code, dept_hr, dept_min);
         return true;
