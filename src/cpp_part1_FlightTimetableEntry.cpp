@@ -105,6 +105,53 @@ bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, Ai
         int first = (int)fl_code/1000;
         int second = (int)fl_code/100;
         int last = (int)fl_code%100;
+        unsigned char dur_h;
+        unsigned char dur_min;
+        getFlightDurationTime(orig, dest, dur_h, dur_min);
+        int dur = (int)dur_h * 60 + (int)dur_min;
+        bool res;
+
+        if(dest > 2 || orig > 2){
+            // do smth if international
+            if(dept_hour >= 12 && dept_min > 0 && first != 9 || (dept_hour < 12 || dept_hour == 12 && dept_min == 0) && first != 2){
+                return false;
+            }
+        }
+        else{
+
+            if(dept_hour >= 12 && dept_min > 0 && first != 7 || (dept_hour < 12 || dept_hour == 12 && dept_min == 0) && first != 0){
+                return false;
+            }
+        }
+
+        if (dur > 90 && second != 5){
+            return false;
+        }
+        else if (dur < 90 && second != 0){
+            return false;
+        }
+
+        switch(air_id){
+            case BA:
+                res = (last >= 80 && last <= 99) ? true : false;
+                break;
+            case SK:
+                res = (last >= 0 && last <= 19) ? true : false;
+                break;
+            case KL:
+                res = (last >= 20 && last <= 39) ? true : false;
+                break;
+            case EZY:
+                res = (last >= 40 && last <= 59) ? true : false;
+                break;
+            case LM:
+                res = (last >= 60 && last <= 79) ? true : false;
+                break;
+            default:
+                res = false;
+                break;
+        }
+        return res;
 
     }
     return true;
