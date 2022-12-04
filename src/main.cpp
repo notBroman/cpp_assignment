@@ -5,7 +5,7 @@
 int main(int argv, char* argc[]){
 
     FlightTimetableEntry a;
-    a.checkEntryVals(Aberdeen, London, BA, 590, 6,0);
+    a.checkEntryVals(FlightTimetableEntry::Aberdeen, FlightTimetableEntry::London, FlightTimetableEntry::BA, 590, 6,0);
 
     std::cout << "Hello World" << std::endl;
     return 0;

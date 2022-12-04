@@ -2,6 +2,8 @@
 
 // static variables
 int FlightTimetableEntry::flight_durations[5][5] = {{-1,95,80,95,85},{95,-1,60,105,95},{80,60,-1,100,90},{95,105,100,-1,50},{85,95,90,50,-1}};
+const char* FlightTimetableEntry::AirportsEnumStrings[6] = {"Aberdeen", "London", "Manchester", "Copenhagen", "Esbjerg", "INVALID"};
+const char* FlightTimetableEntry::AirlinesEnumStrings[6] = {"BA", "SK", "KL", "EZY", "LM", "INVALID"};
 
 // Constructor & Destructor
 FlightTimetableEntry::FlightTimetableEntry(){
@@ -21,16 +23,18 @@ FlightTimetableEntry::~FlightTimetableEntry(){
 bool FlightTimetableEntry::checkAndSetFTE(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_min, unsigned char dept_hour){
     //check basic rules
     if(!this->init_flag && this->checkEntryVals(orig, dest, air_id, fl_code, dept_min, dept_hour)){
-        unsigned char arr_h, arr_min;
-        this->getFlightArrivalTime(orig, dest, dept_hours, dept_min, arr_h, arr_min)
+        unsigned char arr_hour, arr_min;
+        this->getFlightArrivalTime(orig, dest, dept_hour, dept_min, arr_hour, arr_min);
 
         //set values
         this->origin = orig;
         this->destination = dest;
         this->airline_id = air_id;
         this->flight_code = fl_code;
+
         this->departure += this->value2string(dept_hour, dept_min);
         this->arrival += this->value2string(arr_hour, arr_min);
+
         this->init_flag = true;
 
         return true;
@@ -38,6 +42,21 @@ bool FlightTimetableEntry::checkAndSetFTE(AirportEnum orig, AirportEnum dest, Ai
 
     return false;
 }
+
+void FlightTimetableEntry::reset(){
+    this->init_flag = false;
+    this->destination = INVALID;
+    this->origin = INVALID;
+    this->airline_id = NAN;
+    this->flight_code = -1;
+
+    this->departure.clear();
+    this->arrival.clear();
+}
+
+//Getters
+
+
 //Utility
 
 bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_min, unsigned char dept_hour){
@@ -192,39 +211,43 @@ bool FlightTimetableEntry::getFlightDurationTime(AirportEnum orig, AirportEnum d
 }
 
 
-bool getFlightArrivalTime(AirportEnum orig, AirportEnum dest, unsigned char dpt_hrs_loc, unsigned char dpt_min_loc, unsigned char& arr_hrs_loc, unsigned char& arr_min_loc){
+bool FlightTimetableEntry::getFlightArrivalTime(AirportEnum orig, AirportEnum dest, unsigned char dept_hrs_loc, unsigned char dept_min_loc, unsigned char& arr_hrs_loc, unsigned char& arr_min_loc){
     if(orig < 5 && dest < 5){
         unsigned char dur_h, dur_min;
         int arrival = (int)dept_hrs_loc * 60 + (int)dept_min_loc;
 
         getFlightDurationTime(orig, dest, dur_h, dur_min);
         arrival += (int)dur_min;
-        arrical += (int)dur_h * 60;
+        arrival += (int)dur_h * 60;
 
         arr_hrs_loc = arrival/60;
-        arr_min_loc = arrical%60;
+        arr_min_loc = arrival%60;
 
         return true;
     }
     return false;
 }
 
-std::string value2string(AirlineEnum airline){
-    std::string a;
-    return a;
+std::string FlightTimetableEntry::value2string(AirlinesEnum airline){
+    return AirlinesEnumStrings[ airline ];
 }
 
-std::string value2string(AirportEnum){
-    std::string a;
-    return a;
+std::string FlightTimetableEntry::value2string(AirportEnum airport){
+    return AirportsEnumStrings[ airport ];
 }
 
-std::string value2string(unsigned char hour, unsigned char min){
-    std::string a;
-    return a;
+std::string FlightTimetableEntry::value2string(unsigned char hour, unsigned char min){
+    std::string h = std::to_string((int)hour);
+    std::string m = std::to_string((int)min);
+    if(h.size() < 2){
+        h.insert(h.front(),"0");
+    }
+    if(m.size() < 2){
+        m.insert(h.front(),"0");
+    }
+    return h + ":" + m;
 }
 
-std::string value2string(int fl_code){
-    std::string a;
-    return a;
+std::string FlightTimetableEntry::value2string(int fl_code){
+    return std::to_string(42);
 }

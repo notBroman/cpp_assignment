@@ -3,11 +3,15 @@
 #include <ctime>
 #include <string>
 
-enum AirportEnum{Aberdeen=0, London, Manchester, Copenhagen, Esbjerg, INVALID};
-enum AirlinesEnum{BA=0, SK, KL, EZY, LM, NAN};
 
 class FlightTimetableEntry{
+public:
+    enum AirportEnum{Aberdeen=0, London, Manchester, Copenhagen, Esbjerg, INVALID};
+    enum AirlinesEnum{BA=0, SK, KL, EZY, LM, NAN};
+
 protected:
+    static const char* AirportsEnumStrings[6];
+    static const char* AirlinesEnumStrings[6];
 
     AirportEnum origin;
     AirportEnum destination;
