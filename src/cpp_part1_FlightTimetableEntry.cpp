@@ -92,7 +92,7 @@ bool FlightTimetableEntry::setRandomFTE(){
         // get valid fl_code
         this->getFlightDurationTime(orig, dest, dur_hr, dur_min);
         // if the flight is international add 5 as the second digit
-        fl_code += (dur_hr*60+min > 90) ? 500 : 0;
+        fl_code += (dur_hr*60+dur_min > 90) ? 500 : 0;
 
         // add a rendom value for each airline
         switch(airline){
@@ -128,6 +128,7 @@ bool FlightTimetableEntry::setRandomFTE(){
         this->checkAndSetFTE(orig, dest, airline, fl_code, dept_hr, dept_min);
         return true;
     }
+    std::cout << "the object is already initialized, reset it first to assign random values" << std::endl;
     return false;
 }
 
@@ -153,11 +154,16 @@ bool FlightTimetableEntry::getFTE(AirportEnum& orig, AirportEnum& dest, Airlines
 }
 
 void FlightTimetableEntry::printEntry() const {
-    std::cout << "Flight " << this->value2string(this->flight_code) << " :\n" << this->value2string(this->origin) << "->" << this->value2string(this->destination) << std::endl;
-    std::cout << "Departure: " << this->departure << "->" << "Arrival: " << this->arrival << std::endl;
-    unsigned char hr, m;
-    this->getFlightDurationTime(this->origin, this->destination, hr, m);
-    std::cout << "Flight duration: "  << this->value2string(hr, m) << std::endl;
+    if(this->init_flag){
+        std::cout << "Flight " << this->value2string(this->flight_code) << " :\n" << this->value2string(this->origin) << "->" << this->value2string(this->destination) << std::endl;
+        std::cout << "Departure: " << this->departure << "->" << "Arrival: " << this->arrival << std::endl;
+        unsigned char hr, m;
+        this->getFlightDurationTime(this->origin, this->destination, hr, m);
+        std::cout << "Flight duration: "  << this->value2string(hr, m) << std::endl;
+    }
+    else{
+        std::cout << "Flight Timetable Entry not set" << std::endl;
+    }
 }
 
 //Utility
