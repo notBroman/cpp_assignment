@@ -15,7 +15,8 @@ void test_helpers()
     dpt_hrs = 9;
     dpt_min = 5;
     airID = FlightTimetableEntry::BA;
-    flightCode = 5100 + FlightTimetableEntry::RandomValInBounds(0,19);
+    int temp = FlightTimetableEntry::RandomValInBounds(80,99);
+    flightCode = 2000 + temp;
     // -------------------------------------------------------------------------//
     cout << "Test values: " << endl; cout << "Flight origin: " << FlightTimetableEntry::value2string(orig);
     cout << ". Flight destination: " << FlightTimetableEntry::value2string(dest) << endl;
@@ -58,7 +59,7 @@ void test_SettersAndGetters()
     dpt_hrs = 9;
     dpt_min = 5;
     airID = FlightTimetableEntry::BA;
-    flCode = 5100;
+    flCode = 2089;
     // -------------------------------------------------------------------------//
     cout << "Test values: " << endl << "Flight origin: " << FlightTimetableEntry::value2string(orig);
     cout << ". Flight destination: " << FlightTimetableEntry::value2string(dest) << endl;
@@ -94,7 +95,7 @@ void test_SettersAndGetters()
             cout << "getFTE() did not work" << endl;
     }
 }
-
+/*
 void testInsertion() {
     FlightTimetableEntry testEntry;
     FlightTimetableEntry::AirportEnum orig, dest, test_airport=FlightTimetableEntry::Aberdeen;
@@ -144,3 +145,4 @@ void testInsertion() {
         cout << "----------------" << endl;
     }
 }
+*/

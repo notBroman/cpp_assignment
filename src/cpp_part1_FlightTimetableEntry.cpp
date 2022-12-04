@@ -10,7 +10,7 @@ FlightTimetableEntry::FlightTimetableEntry(){
     this->init_flag = false;
     this->destination = INVALID;
     this->origin = INVALID;
-    this->airline_id = NAN;
+    this->airline_id = INV;
 
     this->departure.clear();
     this->arrival.clear();
@@ -20,7 +20,7 @@ FlightTimetableEntry::~FlightTimetableEntry(){
     // do nothing
 }
 //Setters
-bool FlightTimetableEntry::checkAndSetFTE(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_min, unsigned char dept_hour){
+bool FlightTimetableEntry::checkAndSetFTE(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_hour, unsigned char dept_min){
     //check basic rules
     if(!this->init_flag && this->checkEntryVals(orig, dest, air_id, fl_code, dept_min, dept_hour)){
         unsigned char arr_hour, arr_min;
@@ -32,8 +32,8 @@ bool FlightTimetableEntry::checkAndSetFTE(AirportEnum orig, AirportEnum dest, Ai
         this->airline_id = air_id;
         this->flight_code = fl_code;
 
-        this->departure += this->value2string(dept_hour, dept_min);
-        this->arrival += this->value2string(arr_hour, arr_min);
+        this->departure = this->value2string(dept_hour, dept_min);
+        this->arrival = this->value2string(arr_hour, arr_min);
 
         this->init_flag = true;
 
@@ -47,15 +47,82 @@ void FlightTimetableEntry::reset(){
     this->init_flag = false;
     this->destination = INVALID;
     this->origin = INVALID;
-    this->airline_id = NAN;
+    this->airline_id = INV;
     this->flight_code = -1;
 
     this->departure.clear();
     this->arrival.clear();
 }
 
+bool FlightTimetableEntry::setRandomFTE(){
+    if(!this->init_flag){
+        AirportsEnum orig, dest;
+        AirlinesEnum airline;
+        unsigned char dept_hr, dept_min;
+        int fl_code, temp;
+        fl_code = 0;
+
+        orig = this->RandomValInBounds(0,4);
+        dest = this->RandomValInBounds(0,4);
+        airline = this->RandomValInBounds(0,4);
+
+        // get valid departure
+        switch(orig){
+            case Aberdeen:
+                temp = this->RandomValInBounds(5*60,20*60+50);
+                break;
+            case London:
+                temp = this->RandomValInBounds(5*60,21*60+05);
+                break;
+            case Manchester:
+                temp = this->RandomValInBounds(5*60+15,20*60+55);
+                break;
+            case Copenhagen:
+                temp = this->RandomValInBounds(5*60,21*60+45);
+                break;
+            case Esbjerg:
+                temp = this->RandomValInBounds(5*60+45,21*60+30);
+                break;
+        }
+
+        dept_hr = (int)temp/60;
+        dept_min = temp%60;
+        // get valid fl_code
+
+        this->checkAndSetFTE(orig, dest, airline, fl_code, dept_hr, dept_min);
+        return true;
+    }
+    return false;
+}
+
 //Getters
 
+bool FlightTimetableEntry::getFTE(AirportEnum& orig, AirportEnum& dest, AirlinesEnum& air_id, int& fl_code, unsigned char& dept_hour, unsigned char& dept_min, unsigned char& arriv_hr, unsigned char& arriv_min, unsigned char& durat_hr, unsigned char& durat_min){
+    if(this->init_flag){
+        orig = this->origin;
+        dest = this->destination;
+        air_id = this->airline_id;
+        fl_code = this->flight_code;
+        // the colon will always be at position 2 (xx:yy)
+        // a substring of length 2 is always looked for
+        dept_hour = std::stoi(departure.substr(0,2),nullptr);
+        dept_min = std::stoi(departure.substr(3,2),nullptr);
+        arriv_hr = std::stoi(arrival.substr(0,2),nullptr);
+        arriv_min = std::stoi(arrival.substr(3,2),nullptr);
+        this->getFlightDurationTime(orig, dest, durat_hr, durat_min);
+
+        return true;
+    }
+    return false;
+}
+
+void FlightTimetableEntry::printEntry() const {
+    std::cout << "Flight " << this->value2string(this->flight_code) << " :\n" << this->value2string(this->origin) << "->" << this->value2string(this->destination) << std::endl;
+    std::cout << "Departure: " << this->departure << "->" << "Arrival: " << this->arrival << std::endl;
+    unsigned char hr, m;
+    this->getFlightDurationTime(this->origin, this->destination, hr, m);
+    std::cout << "Flight duration: "  << this->value2string(hr, m) << std::endl;
+}
 
 //Utility
 
@@ -137,7 +204,7 @@ bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, Ai
         //  EZY: 40-59
         //  LM: 60-79
         int first = (int)fl_code/1000;
-        int second = (int)fl_code/100;
+        int second = (int)fl_code%1000/100;
         int last = (int)fl_code%100;
         unsigned char dur_h;
         unsigned char dur_min;
@@ -240,14 +307,24 @@ std::string FlightTimetableEntry::value2string(unsigned char hour, unsigned char
     std::string h = std::to_string((int)hour);
     std::string m = std::to_string((int)min);
     if(h.size() < 2){
-        h.insert(h.front(),"0");
+        h = "0" + h;
     }
     if(m.size() < 2){
-        m.insert(h.front(),"0");
+        m = "0" + m;
     }
     return h + ":" + m;
 }
 
 std::string FlightTimetableEntry::value2string(int fl_code){
-    return std::to_string(42);
+    std::string a = std::to_string(fl_code);
+    if(a.size() < 4){
+        a = "0" + a;
+    }
+    return a;
+}
+
+int FlightTimetableEntry::RandomValInBounds(int min_val, int max_val){
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(min_val, max_val);
+    return distribution(generator);
 }

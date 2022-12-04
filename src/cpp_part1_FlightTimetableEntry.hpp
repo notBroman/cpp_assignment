@@ -2,12 +2,13 @@
 #include <iostream>
 #include <ctime>
 #include <string>
+#include <random>
 
 
 class FlightTimetableEntry{
 public:
     enum AirportEnum{Aberdeen=0, London, Manchester, Copenhagen, Esbjerg, INVALID};
-    enum AirlinesEnum{BA=0, SK, KL, EZY, LM, NAN};
+    enum AirlinesEnum{BA=0, SK, KL, EZY, LM, INV};
 
 protected:
     static const char* AirportsEnumStrings[6];
@@ -34,8 +35,8 @@ public:
     void reset();
 
     // Getter Functions
-    const bool getFTE(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_min, unsigned char dept_hour);
-    const void printEntry();
+bool getFTE(AirportEnum& orig, AirportEnum& dest, AirlinesEnum& air_id, int& fl_code, unsigned char& dept_min, unsigned char& dept_hour, unsigned char& arriv_hr, unsigned char& arriv_min, unsigned char& durat_hr, unsigned char& durat_min);
+    void printEntry() const;
 
     // Utility Functions
 
