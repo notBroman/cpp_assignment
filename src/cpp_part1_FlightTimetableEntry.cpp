@@ -9,6 +9,9 @@ FlightTimetableEntry::FlightTimetableEntry(){
     this->destination = INVALID;
     this->origin = INVALID;
     this->airline_id = NAN;
+
+    this->departure.clear();
+    this->arrival.clear();
 }
 
 FlightTimetableEntry::~FlightTimetableEntry(){
@@ -18,7 +21,18 @@ FlightTimetableEntry::~FlightTimetableEntry(){
 bool FlightTimetableEntry::checkAndSetFTE(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_min, unsigned char dept_hour){
     //check basic rules
     if(!this->init_flag && this->checkEntryVals(orig, dest, air_id, fl_code, dept_min, dept_hour)){
+        unsigned char arr_h, arr_min;
+        this->getFlightArrivalTime(orig, dest, dept_hours, dept_min, arr_h, arr_min)
+
         //set values
+        this->origin = orig;
+        this->destination = dest;
+        this->airline_id = air_id;
+        this->flight_code = fl_code;
+        this->departure += this->value2string(dept_hour, dept_min);
+        this->arrival += this->value2string(arr_hour, arr_min);
+        this->init_flag = true;
+
         return true;
     }
 
@@ -81,6 +95,7 @@ bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, Ai
             case Esbjerg:
                 break;
             default:
+                std::cout << "invlad destination" << std::endl;
                 return false;
         }
         // check air_id is correct
@@ -114,20 +129,24 @@ bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, Ai
         if(dest > 2 || orig > 2){
             // do smth if international
             if(dept_hour >= 12 && dept_min > 0 && first != 9 || (dept_hour < 12 || dept_hour == 12 && dept_min == 0) && first != 2){
+                std::cout << "flight code incorrect" << std::endl;
                 return false;
             }
         }
         else{
 
             if(dept_hour >= 12 && dept_min > 0 && first != 7 || (dept_hour < 12 || dept_hour == 12 && dept_min == 0) && first != 0){
+                std::cout << "flight code incorrect" << std::endl;
                 return false;
             }
         }
 
         if (dur > 90 && second != 5){
+            std::cout << "flight code incorrect" << std::endl;
             return false;
         }
         else if (dur < 90 && second != 0){
+            std::cout << "flight code incorrect" << std::endl;
             return false;
         }
 
@@ -149,10 +168,13 @@ bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, Ai
                 break;
             default:
                 res = false;
+                std::cout << "flight code incorrect" << std::endl;
                 break;
         }
-        return res;
-
+        if(res == false){
+            std::cout << "flight code incorrect" << std::endl;
+            return res;
+        }
     }
     return true;
 
@@ -167,4 +189,42 @@ bool FlightTimetableEntry::getFlightDurationTime(AirportEnum orig, AirportEnum d
         return true;
     }
     return false;
+}
+
+
+bool getFlightArrivalTime(AirportEnum orig, AirportEnum dest, unsigned char dpt_hrs_loc, unsigned char dpt_min_loc, unsigned char& arr_hrs_loc, unsigned char& arr_min_loc){
+    if(orig < 5 && dest < 5){
+        unsigned char dur_h, dur_min;
+        int arrival = (int)dept_hrs_loc * 60 + (int)dept_min_loc;
+
+        getFlightDurationTime(orig, dest, dur_h, dur_min);
+        arrival += (int)dur_min;
+        arrical += (int)dur_h * 60;
+
+        arr_hrs_loc = arrival/60;
+        arr_min_loc = arrical%60;
+
+        return true;
+    }
+    return false;
+}
+
+std::string value2string(AirlineEnum airline){
+    std::string a;
+    return a;
+}
+
+std::string value2string(AirportEnum){
+    std::string a;
+    return a;
+}
+
+std::string value2string(unsigned char hour, unsigned char min){
+    std::string a;
+    return a;
+}
+
+std::string value2string(int fl_code){
+    std::string a;
+    return a;
 }
