@@ -8,6 +8,7 @@ add_executable(a.out
     src/main.cpp
     src/tester.cpp
     src/cpp_part1_FlightTimetableEntry.cpp
+    src/cpp_part2_AirportFlightTimetable.cpp
 )
 
 target_compile_features(a.out PUBLIC cxx_std_11)

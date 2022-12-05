@@ -103,7 +103,6 @@ void testInsertion() {
     unsigned char dur_hrs, dur_min, dpt_hrs, dpt_min, arr_hrs, arr_min;
     FlightTimetableEntry::AirlinesEnum airID;
     bool result;
-    int flCode;
     AirportFlightTimetable ABD_Timetable;
     bool check;
     int flCode, tot_tests = 50;

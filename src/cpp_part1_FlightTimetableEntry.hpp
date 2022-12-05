@@ -35,10 +35,11 @@ public:
     void reset();
 
     // Getter Functions
-bool getFTE(AirportEnum& orig, AirportEnum& dest, AirlinesEnum& air_id, int& fl_code, unsigned char& dept_min, unsigned char& dept_hour, unsigned char& arriv_hr, unsigned char& arriv_min, unsigned char& durat_hr, unsigned char& durat_min);
+bool getFTE(AirportEnum& orig, AirportEnum& dest, AirlinesEnum& air_id, int& fl_code, unsigned char& dept_min, unsigned char& dept_hour, unsigned char& arriv_hr, unsigned char& arriv_min, unsigned char& durat_hr, unsigned char& durat_min) const;
     void printEntry() const;
 
     // Utility Functions
+    bool isEntrySet();
 
     static bool getFlightDurationTime(AirportEnum orig, AirportEnum dest, unsigned char& out_hrs, unsigned char& out_min);
     static bool getFlightArrivalTime(AirportEnum orig, AirportEnum dest, unsigned char dpt_hrs_loc, unsigned char dpt_min_loc, unsigned char& arr_hrs_loc, unsigned char& arr_min_loc);

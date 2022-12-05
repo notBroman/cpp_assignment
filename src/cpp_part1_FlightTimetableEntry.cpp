@@ -134,7 +134,7 @@ bool FlightTimetableEntry::setRandomFTE(){
 
 //Getters
 
-bool FlightTimetableEntry::getFTE(AirportEnum& orig, AirportEnum& dest, AirlinesEnum& air_id, int& fl_code, unsigned char& dept_hour, unsigned char& dept_min, unsigned char& arriv_hr, unsigned char& arriv_min, unsigned char& durat_hr, unsigned char& durat_min){
+bool FlightTimetableEntry::getFTE(AirportEnum& orig, AirportEnum& dest, AirlinesEnum& air_id, int& fl_code, unsigned char& dept_hour, unsigned char& dept_min, unsigned char& arriv_hr, unsigned char& arriv_min, unsigned char& durat_hr, unsigned char& durat_min) const {
     if(this->init_flag){
         orig = this->origin;
         dest = this->destination;
@@ -167,6 +167,10 @@ void FlightTimetableEntry::printEntry() const {
 }
 
 //Utility
+
+bool FlightTimetableEntry::isEntrySet(){
+    return this->init_flag;
+}
 
 bool FlightTimetableEntry::checkEntryVals(AirportEnum orig, AirportEnum dest, AirlinesEnum air_id, int fl_code, unsigned char dept_min, unsigned char dept_hour){
     if(orig == dest){
