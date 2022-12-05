@@ -95,7 +95,7 @@ void test_SettersAndGetters()
             cout << "getFTE() did not work" << endl;
     }
 }
-/*
+
 void testInsertion() {
     FlightTimetableEntry testEntry;
     FlightTimetableEntry::AirportEnum orig, dest, test_airport=FlightTimetableEntry::Aberdeen;
@@ -145,4 +145,3 @@ void testInsertion() {
         cout << "----------------" << endl;
     }
 }
-*/
