@@ -20,7 +20,7 @@ class AirportFlightTimetable{
         // implemented as a doubly linked list
         std::list<FlightTimetableEntry> departures;
         std::list<FlightTimetableEntry> arrivals;
-        FlightTimetableEntry::AirportEnum home_airport = FlightTimetableEntry::Esbjerg;
+        const FlightTimetableEntry::AirportEnum home_airport = FlightTimetableEntry::Esbjerg;
 
     public:
         bool checkEntryIsValid(const FlightTimetableEntry& test_entry, bool verbose) const;

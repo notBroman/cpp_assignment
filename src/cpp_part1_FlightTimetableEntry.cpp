@@ -125,8 +125,7 @@ bool FlightTimetableEntry::setRandomFTE(){
         fl_code += ( orig > 2 || dest > 2 ) ? 2000 : 0;
 
 
-        this->checkAndSetFTE(orig, dest, airline, fl_code, dept_hr, dept_min);
-        return true;
+        return this->checkAndSetFTE(orig, dest, airline, fl_code, dept_hr, dept_min);
     }
     std::cout << "the object is already initialized, reset it first to assign random values" << std::endl;
     return false;
@@ -370,7 +369,8 @@ std::string FlightTimetableEntry::value2string(int fl_code){
 }
 
 int FlightTimetableEntry::RandomValInBounds(int min_val, int max_val){
-    std::default_random_engine generator;
+    std::random_device rand_dev;
+    std::mt19937 generator(rand_dev());
     std::uniform_int_distribution<int> distribution(min_val, max_val);
     return distribution(generator);
 }

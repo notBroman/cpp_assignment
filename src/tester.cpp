@@ -98,14 +98,14 @@ void test_SettersAndGetters()
 
 void testInsertion() {
     FlightTimetableEntry testEntry;
-    FlightTimetableEntry::AirportEnum orig, dest, test_airport=FlightTimetableEntry::Aberdeen;
+    FlightTimetableEntry::AirportEnum orig, dest, test_airport=FlightTimetableEntry::Esbjerg;
 
     unsigned char dur_hrs, dur_min, dpt_hrs, dpt_min, arr_hrs, arr_min;
     FlightTimetableEntry::AirlinesEnum airID;
     bool result;
     AirportFlightTimetable ABD_Timetable;
     bool check;
-    int flCode, tot_tests = 50;
+    int flCode, tot_tests = 10;
     for (int test_i = 0; test_i < tot_tests; test_i++)
     {
         if (ABD_Timetable.isTimetableFull())
@@ -122,6 +122,7 @@ void testInsertion() {
                 {
                     cout << "Checking entry:" << endl; testEntry.printEntry();
                     check = ABD_Timetable.checkEntryIsValid(testEntry, true);// print to screen the (first) rule that is violated
+                    cout << 1 << endl;
                     if (check)
                     { // insert entry and print
                         cout << endl << "Entry is valid: Inserting Entry" << endl; check = ABD_Timetable.checkAndAddEntry(testEntry);
